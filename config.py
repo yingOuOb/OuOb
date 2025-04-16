@@ -10,8 +10,6 @@ PS:在 Python 的各種檔案路徑調用中,
 BY 翁好🐑
 '''
 load_dotenv(os.path.join(BASEDIR, '.env'),override=True) #從.env檔案讀取環境變數，override=True表示如果已經存在的環境變數會被覆蓋
-MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD") # MongoDB的密碼
-MONGODB_URL = f"mongodb+srv://<db_username>:" + MONGODB_PASSWORD +"@cluster0.l83fzgt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 TOKEN = os.getenv("TOKEN") # Token
 CLIENT_ID = os.getenv("CLIENT_ID") # 客戶端ID
 CLIENT_SECRET = os.getenv("CLIENT_SECRET") # 客戶端密鑰
