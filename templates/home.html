@@ -21,6 +21,11 @@
       height: 350px;
       position: relative;
       animation: slide-up 0.6s ease-out;
+      display: none; /* Initially hide the card */
+    }
+
+    .card-container.show {
+      display: block; /* Show the card when the class 'show' is added */
     }
 
     @keyframes slide-up {
@@ -124,10 +129,10 @@
       const cardFrontImg = document.getElementById("card-front-img");
 
       const imageMap = {
-        "SSR 卡片✨": "{{ url_for('static', filename='cards/ssr.png') }}",
-        "SR 卡片🌟": "{{ url_for('static', filename='cards/sr.png') }}",
-        "R 卡片⭐": "{{ url_for('static', filename='cards/r.png') }}",
-        "N 卡片📄": "{{ url_for('static', filename='cards/n.png') }}"
+        "SSR 卡片✨": "{{ url_for('static', filename='ssr.png') }}",
+        "SR 卡片🌟": "{{ url_for('static', filename='sr.png') }}",
+        "R 卡片⭐": "{{ url_for('static', filename='r.png') }}",
+        "N 卡片📄": "https://truth.bahamut.com.tw/s01/201905/c8fe8874d83e26d6a4a8a343dbd05ee1.JPG"
       };
 
       drawBtn.addEventListener("click", () => {
