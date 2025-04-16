@@ -10,9 +10,8 @@ PS:在 Python 的各種檔案路徑調用中,
 BY 翁好🐑
 '''
 load_dotenv(os.path.join(BASEDIR, '.env'),override=True) #從.env檔案讀取環境變數，override=True表示如果已經存在的環境變數會被覆蓋
-
-SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI") #從環境變數讀取資料庫連線字串
-API_KEY = os.getenv("API_KEY") # API 金鑰
+MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD") # MongoDB的密碼
+MONGODB_URL = f"mongodb+srv://<db_username>:" + MONGODB_PASSWORD +"@cluster0.l83fzgt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 TOKEN = os.getenv("TOKEN") # Token
 CLIENT_ID = os.getenv("CLIENT_ID") # 客戶端ID
 CLIENT_SECRET = os.getenv("CLIENT_SECRET") # 客戶端密鑰
@@ -23,5 +22,4 @@ OAUTH_URL ="https://discord.com/oauth2/authorize?client_id=" + CLIENT_ID +"&resp
 
 class Config(object): #設定Flask的配置類別
     JSON_AS_ASCII = False #讓JSON的編碼不使用ASCII編碼，這樣可以正確顯示中文
-    SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI #為了了讓Flask-SQLAlchemy可以使用這個資料庫連線字串
     SECRET_KEY =os.urandom(24) #加密session資料
