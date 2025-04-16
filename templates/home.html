@@ -21,6 +21,11 @@
       height: 350px;
       position: relative;
       animation: slide-up 0.6s ease-out;
+      display: none; /* Initially hide the card */
+    }
+
+    .card-container.show {
+      display: block; /* Show the card when the class 'show' is added */
     }
 
     @keyframes slide-up {
@@ -90,53 +95,86 @@
 
   <h1 class="mb-4">🎴 歡迎，{{ user.username }}</h1>
 
+  <!-- 🔘 抽卡按鈕：移到上方 -->
+ <!-- 🔘 抽卡按鈕 + 登出按鈕：排在同一排，左右分散 -->
+<!-- ✅ 抽卡按鈕（大） + 登出按鈕（小），垂直排列 -->
+<div class="d-flex flex-column align-items-center mb-4" style="gap: 10px;">
+  <button id="draw-btn" class="btn btn-warning btn-lg glow">抽卡！</button>
+  <a href="/logout" class="btn btn-outline-secondary btn-sm">登出</a>
+</div>
+
+  <!-- 📝 抽卡結果 -->
+  <div id="result-text" class="mb-3 text-center fw-bold fs-5"></div>
+
+  <!-- 🎴 卡片動畫區 -->
   <div class="card-container">
     <div class="card-inner" id="card-inner">
       <div class="card-face card-back">
         <img src="{{ url_for('static', filename='71874e05c6cce6d6effe02a1627829e3.png') }}" alt="卡背">
       </div>
       <div class="card-face card-front">
-        <img id="card-front-img" src="https://i.imgur.com/yKZ4N6f.png" alt="卡面">
+        <img id="card-front-img" src="" alt="卡面">
       </div>
     </div>
   </div>
 
-  <button id="draw-button" class="btn btn-warning btn-lg glow">抽卡！</button>
-  <div id="card-result-text" class="mt-3"></div>
-  <a href="/logout" class="btn btn-outline-secondary mt-4">登出</a>
 
+
+
+  <!-- JavaScript 放在這裡（不變） -->
   <script>
-    const drawBtn = document.getElementById("draw-button");
-    const cardInner = document.getElementById("card-inner");
-    const cardFrontImg = document.getElementById("card-front-img");
-    const resultText = document.getElementById("card-result-text");
+    document.addEventListener("DOMContentLoaded", function () {
+      const drawBtn = document.getElementById("draw-btn");
+      const resultText = document.getElementById("result-text");
+      const cardFrontImg = document.getElementById("card-front-img");
 
-    const imageMap = {
-      "SSR 卡片✨": "https://i.imgur.com/w1URelL.png",
-      "SR 卡片🌟": "https://i.imgur.com/N0f2Rtt.png",
-      "R 卡片⭐": "https://i.imgur.com/8cmM3Si.png",
-      "N 卡片📄": "https://truth.bahamut.com.tw/s01/201905/c8fe8874d83e26d6a4a8a343dbd05ee1.JPG"
-    };
+      const imageMap = {
+        "SSR 卡片✨": "{{ url_for('static', filename='ssr.png') }}",
+        "SR 卡片🌟": "{{ url_for('static', filename='sr.png') }}",
+        "R 卡片⭐": "{{ url_for('static', filename='r.png') }}",
+        "N 卡片📄": "https://truth.bahamut.com.tw/s01/201905/c8fe8874d83e26d6a4a8a343dbd05ee1.JPG"
+      };
 
-    drawBtn.addEventListener("click", () => {
-      cardInner.classList.remove("flip");
-      resultText.innerText = "";
+      drawBtn.addEventListener("click", () => {
+        const cardContainer = document.querySelector(".card-container");
+        const cardInner = document.getElementById("card-inner");
 
-      setTimeout(() => {
-        fetch("/draw-card", { method: "POST" })
-          .then(res => res.json())
-          .then(data => {
-            const imgUrl = imageMap[data.result] || imageMap["N 卡片📄"];
-            cardFrontImg.src = imgUrl;
-            cardInner.classList.add("flip");
-            resultText.innerText = "🎉 你抽到了：「" + data.result + "」";
-          })
-          .catch(() => {
-            resultText.innerText = "😢 抽卡失敗，請稍後再試";
-          });
-      }, 500);
+        resultText.innerText = "";
+
+        if (cardContainer.classList.contains("show")) {
+          cardInner.classList.remove("flip");
+          cardContainer.classList.remove("show");
+
+          setTimeout(() => {
+            drawAndAnimate(cardContainer, cardInner);
+          }, 500);
+        } else {
+          drawAndAnimate(cardContainer, cardInner);
+        }
+      });
+
+      function drawAndAnimate(cardContainer, cardInner) {
+        setTimeout(() => {
+          cardContainer.classList.add("show");
+
+          setTimeout(() => {
+            fetch("/draw-card", { method: "POST" })
+              .then(res => res.json())
+              .then(data => {
+                const imgUrl = imageMap[data.result] || imageMap["N 卡片📄"];
+                cardFrontImg.src = imgUrl;
+                cardInner.classList.add("flip");
+                resultText.innerText = "🎉 你抽到了：「" + data.result + "」";
+              })
+              .catch(() => {
+                resultText.innerText = "😢 抽卡失敗，請稍後再試";
+              });
+          }, 600);
+        }, 100);
+      }
     });
-  </script>
+ </script>
 
 </body>
+
 </html>

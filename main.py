@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from zenora import APIClient 
-from config import Config,TOKEN,API_KEY,CLIENT_ID,CLIENT_SECRET,REDIRECT_URI,OAUTH_URL
+from config import Config,TOKEN,CLIENT_ID,CLIENT_SECRET,REDIRECT_URI,OAUTH_URL
 import random
 
 app= Flask(__name__)
